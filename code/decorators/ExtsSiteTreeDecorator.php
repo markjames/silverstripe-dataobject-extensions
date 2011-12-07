@@ -266,16 +266,13 @@ class ExtsSiteTreeDecorator extends SiteTreeDecorator {
 	/**
 	* Get the top-level ancestor of the current page
 	*
+	* @see SiteTree::Level()
 	* @return SiteTree The top-level ('section') ancestor page of the
 	*                  current page
 	*/
 	public function TopLevelParent() {
 
-		$page = $this->owner;
-		while($page->ParentID > 0) {
-			$page = $page->Parent;
-		}
-		return $page;
+		return $this->owner->Level(1);
 
 	}
 
