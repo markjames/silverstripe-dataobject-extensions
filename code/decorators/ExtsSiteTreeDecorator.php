@@ -264,6 +264,76 @@ class ExtsSiteTreeDecorator extends SiteTreeDecorator {
 	}
 
 	/**
+	* Get the nearest ancestor with one of the given types (or subclasses of
+	* that type) (beginning at the current page and progressing up through the
+	* hierarchy until a page is found).
+	*
+	* @param string $type,... unlimited OPTIONAL number of names of types to
+	*                         match ancestors against
+	* @return SiteTree|null The closest ancestor with the given type, or null
+	*                       if no page exists in the ancestry with one of the
+	*                       specified types.
+	*/
+	public function Closest() {
+
+		$searchTypes = func_get_args();
+		if( !count($searchTypes) ) {
+			$searchTypes = array('SiteTree');
+		}
+
+		$page = $this->owner;
+		while($page->ParentID > 0) {
+			$page = $page->Parent;
+			if( !$page ) {
+				return null;
+			}
+			$pageType = get_class($page);
+			foreach( $searchTypes as $searchType ) {
+				if( is_a($page, $searchType) ) {
+					return $page;
+				}
+			}
+		}
+		return null;
+
+	}
+
+	/**
+	* Get the the ancestor closest to the top level ancestor with one of the
+	* given types (or subclasses of that type)
+	*
+	* @param string $type,... unlimited OPTIONAL number of names of types to
+	*                         match ancestors against
+	* @return SiteTree|null The furthest ancestor with the given type, or null
+	*                       if no page exists in the ancestry with one of the
+	*                       specified types.
+	*/
+	public function Furthest() {
+
+		$searchTypes = func_get_args();
+		if( !count($searchTypes) ) {
+			$searchTypes = array('SiteTree');
+		}
+
+		$matchedPage = null;
+		$page = $this->owner;
+		while($page->ParentID > 0) {
+			$page = $page->Parent;
+			if( !$page ) {
+				return null;
+			}
+			$pageType = get_class($page);
+			foreach( $searchTypes as $searchType ) {
+				if( is_a($page, $searchType) ) {
+					$matchedPage = $page;
+				}
+			}
+		}
+		return $matchedPage;
+
+	}
+
+	/**
 	* Get the top-level ancestor of the current page
 	*
 	* @see SiteTree::Level()
