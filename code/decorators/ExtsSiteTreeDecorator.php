@@ -289,7 +289,7 @@ class ExtsSiteTreeDecorator extends SiteTreeDecorator {
 			}
 			$pageType = get_class($page);
 			foreach( $searchTypes as $searchType ) {
-				if( is_a($page, $searchType) ) {
+				if( $page instanceof $searchType ) {
 					return $page;
 				}
 			}
@@ -324,7 +324,7 @@ class ExtsSiteTreeDecorator extends SiteTreeDecorator {
 			}
 			$pageType = get_class($page);
 			foreach( $searchTypes as $searchType ) {
-				if( is_a($page, $searchType) ) {
+				if( $page instanceof $searchType ) {
 					$matchedPage = $page;
 				}
 			}
